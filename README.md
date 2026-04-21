@@ -1,44 +1,55 @@
 # Lab1 Machine Learning
 
-Proyecto base simplificado para el Laboratorio 1.
+Repositorio para el Laboratorio 1 de mineria de textos basado en notebook.
 
 ## Estructura
 
-- `data/raw/`: datos originales (CSV, descargas, exportaciones)
-- `data/processed/`: corpus consolidado (Parquet/Pickle)
-- `notebooks/`: notebook principal del laboratorio
-- `outputs/`: figuras, resultados y salidas auxiliares
+- `notebooks/`: notebook principal del laboratorio.
+- `procesamiento/`: adquisicion de datos (X API y RSS).
+- `fuentes/`: consolidacion, limpieza y analisis de texto.
+- `persistencia/`: guardado en binario y MongoDB.
+- `data/`: salidas del corpus (Parquet y Pickle).
 
-## Flujo sugerido (segun PDF)
+## Flujo de trabajo
 
-1. Obtener datos desde X, RSS y fuente opcional CSV.
-2. Estandarizar columnas minimas (id, fuente, texto).
-3. Consolidar corpus en un DataFrame.
-4. Guardar en Parquet y Pickle.
-5. Aplicar limpieza, TF-IDF, K-Means y PCA.
-6. (Opcional) Persistir en MongoDB con upsert.
+1. Recoleccion de textos desde X y RSS de Radio Cooperativa.
+2. Consolidacion de fuentes en un DataFrame unificado.
+3. Limpieza y normalizacion de texto.
+4. Analisis con frecuencia de tokens, TF-IDF, K-Means y PCA.
+5. Persistencia local en Parquet y Pickle.
+6. Persistencia opcional en MongoDB (upsert).
 
-## Inicio rapido
+## Dependencias
+
+Instalar con:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Incluye:
+
+- pandas
+- requests
+- feedparser
+- pyarrow
+- nltk
+- scikit-learn
+- pymongo
+- matplotlib
+- jupyter
+
+## Ejecucion
+
+```bash
 jupyter notebook
 ```
 
-## Parte inicial de codigo
+Abrir el notebook principal:
 
-Se agrego un script base para arrancar el flujo con una fuente CSV opcional:
+- `notebooks/lab1_notebook.ipynb`
 
-- `starter_pipeline.py`: lee un CSV, estandariza columnas minimas (`id`, `fuente`, `texto`) y guarda en Parquet/Pickle.
-- `data/raw/fuente_opcional.csv`: archivo de ejemplo para probar el flujo.
+## Credenciales
 
-Ejecucion:
-
-```bash
-python starter_pipeline.py
-```
-
-Salida esperada:
-
-- `data/processed/corpus.parquet`
-- `data/processed/corpus.pkl`
+- Bearer Token de X: requerido para el flujo completo. Si aun no esta disponible, se puede ejecutar temporalmente con RSS Cooperativa.
+- MongoDB URI: habilita la persistencia externa con upsert en la coleccion configurada.
