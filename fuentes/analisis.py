@@ -32,3 +32,26 @@ def aplicar_pca(X, df):
     df["pca_2"] = X_pca[:, 1]
 
     return df
+
+
+def obtener_terminos_cluster(vectorizer, modelo_kmeans, top_k=10):
+    """
+    Obtiene los términos más representativos de cada cluster.
+    
+    Args:
+        vectorizer: TfidfVectorizer ajustado
+        modelo_kmeans: Modelo KMeans ajustado
+        top_k: Número de términos a mostrar por cluster
+    
+    Returns:
+        Dict con términos por cluster
+    """
+    feature_names = vectorizer.get_feature_names_out()
+    terminos_cluster = {}
+    
+    for i, centro in enumerate(modelo_kmeans.cluster_centers_):
+        indices_top = centro.argsort()[-top_k:][::-1]
+        terminos = [feature_names[idx] for idx in indices_top]
+        terminos_cluster[f"Cluster {i}"] = terminos
+    
+    return terminos_cluster
