@@ -13,7 +13,16 @@ def guardar_en_mongodb(df, uri, db_name, collection_name):
         print("No hay URI de MongoDB")
         return None
 
-    client = MongoClient(uri)
+    # Connection parameters optimized for notebook/interactive environment
+    # connectTimeoutMS: Fail fast if can't connect (5s)
+    # serverSelectionTimeoutMS: Timeout for server discovery (5s)
+    # socketTimeoutMS: Timeout for individual operations (10s)
+    client = MongoClient(
+        uri,
+        connectTimeoutMS=5000,
+        serverSelectionTimeoutMS=5000,
+        socketTimeoutMS=10000,
+    )
 
     try:
         client.admin.command("ping")
@@ -51,5 +60,12 @@ def guardar_en_mongodb(df, uri, db_name, collection_name):
             f"modified={resumen['modified']} | upserted={resumen['upserted']}"
         )
         return resumen
+    except Exception as e:
+        print(f"❌ Error de conexión MongoDB: {type(e).__name__}: {str(e)}")
+        print("Verifica que:")
+        print("  1. La URI de MongoDB sea correcta")
+        print("  2. El cluster esté disponible y accesible")
+        print("  3. Tu IP esté en la whitelist de MongoDB Atlas (si aplica)")
+        return None
     finally:
         client.close()
